@@ -1,0 +1,115 @@
+/* ─── Tailwind CSS base directives ─────────────────────────────────────────
+   These three @tailwind lines load Tailwind's built-in styles.
+   @base    = CSS reset (removes browser default margins, sets box-sizing, etc.)
+   @components = reusable class groups (we can define our own .btn, .card etc.)
+   @utilities  = all the helper classes like flex, text-white, p-4, rounded, etc. */
+/* ─── Google Font: Inter ────────────────────────────────────────────────────
+   @import MUST be the very first statement in CSS (before @tailwind directives).
+   This loads the Inter font from Google's free font service.
+   font-display=swap shows text immediately in a fallback font, then swaps to Inter. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ─── Tailwind CSS base directives ─────────────────────────────────────────
+   @base    = CSS reset (removes default margins, sets box-sizing, etc.)
+   @components = reusable class groups we can define ourselves
+   @utilities  = all helper classes like flex, text-white, p-4, rounded, etc. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Global body reset ─────────────────────────────────────────────────────*/
+body {
+  margin: 0;                          /* remove the default 8px margin browsers add */
+  padding: 0;                         /* remove default padding                    */
+  font-family: 'Inter', sans-serif;   /* use Inter everywhere in the app           */
+  overflow-x: hidden;                 /* never show a horizontal scrollbar         */
+  min-height: 100vh;                  /* body is always at least the full viewport */
+  transition: background 1.5s ease;  /* smoothly animate background color changes */
+}
+
+/* ─── Root div (where React mounts) ────────────────────────────────────────*/
+#root {
+  min-height: 100vh;   /* fill the full screen height                        */
+  width: 100%;         /* fill the full screen width                         */
+}
+
+/* ─── Clock canvas background ───────────────────────────────────────────────
+   The <canvas> is the bottom-most layer inside the clock circle.              */
+.clock-canvas {
+  position: absolute;          /* sits at the back; doesn't affect layout      */
+  top: 0;
+  left: 0;
+  display: block;              /* no inline spacing gaps                        */
+  border-radius: 9999px;       /* clips the element box to the circle shape    */
+  background: transparent;     /* canvas itself is transparent (drawing clips) */
+}
+
+/* ─── Clock number labels ───────────────────────────────────────────────────
+   Each hour number on the clock face is a <span> positioned with JS.         */
+.clock-number {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+  /* Multi-layer shadow: visible on both dark AND bright backgrounds */
+  text-shadow:
+    0 0 4px  rgba(0,0,0,1),
+    0 0 8px  rgba(0,0,0,0.9),
+    0 1px 2px rgba(0,0,0,0.9);
+}
+
+/* ─── Clock hand ────────────────────────────────────────────────────────────
+   Each clock hand (hour, minute, second) is a <div> rotated by JS.           */
+.clock-hand {
+  position: absolute;                              /* positioned inside the clock circle     */
+  bottom: 50%;                                     /* base of the hand sits at clock center  */
+  left: 50%;                                       /* horizontally centered                  */
+  transform-origin: bottom center;                 /* rotate around the base (pivot point)   */
+  border-radius: 4px;                              /* rounded tips                           */
+  transition: transform 0.25s cubic-bezier(0.4, 2.08, 0.55, 0.44); /* bouncy tick animation */
+}
+
+/* ─── Glassmorphism card ────────────────────────────────────────────────────
+   A "frosted glass" look used for overlay panels (language box, settings).
+   It works by blurring whatever is behind the element.                        */
+.glass-card {
+  background: rgba(0, 0, 0, 0.40);            /* dark tint — ensures white text is readable on any sky */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+}
+
+/* ─── Thin custom scrollbar ─────────────────────────────────────────────────*/
+::-webkit-scrollbar        { width: 4px; }                              /* very thin bar     */
+::-webkit-scrollbar-track  { background: transparent; }                 /* invisible track   */
+::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.3); border-radius: 2px; } /* semi-transparent handle */
+
+/* ─── Pulsing live indicator dot ────────────────────────────────────────────*/
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1;   transform: scale(1);   } /* fully visible, normal size  */
+  50%       { opacity: 0.4; transform: scale(1.4); } /* faded and slightly bigger   */
+}
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; } /* loop forever */
+
+/* ─── Fade-in animation ─────────────────────────────────────────────────────*/
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.fade-in-up { animation: fadeInUp 0.35s ease-out; }
+
+/* ─── Background image layer ────────────────────────────────────────────────*/
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-layer-fade { transition: opacity 2s ease; }
