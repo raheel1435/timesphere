@@ -57,8 +57,6 @@ export function getAppBackground(sky: SkyCondition, condition: string): string {
 export function getThemeBackground(theme: AppTheme, sky: SkyCondition, condition: string): string {
   switch (theme) {
     case "dark":    return "linear-gradient(180deg, #0a0a1a 0%, #0d1b2a 100%)";
-    case "light":   return "linear-gradient(180deg, #b0d4f5 0%, #deeefb 100%)";
-    case "nature":  return "linear-gradient(180deg, #1a4a2e 0%, #2d6e45 100%)";
     case "space":   return "linear-gradient(180deg, #0d0a1e 0%, #1a0a3e 100%)";
     case "auto":
     default:        return getAppBackground(sky, condition);
